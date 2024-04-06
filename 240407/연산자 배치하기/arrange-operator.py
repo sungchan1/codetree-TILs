@@ -26,4 +26,5 @@ def dfs(index: int, value: int, numbers: list, operands: list) -> list[int, int]
 n = int(s.readline())
 numbers = list(map(int, s.readline().split()))
 operands = list(map(int, s.readline().split()))
-print(" ".join(map(str, dfs(1, numbers[0], numbers, operands))))
+results = dfs(1, numbers[0], numbers, operands)
+print(results[0], results[-1])
