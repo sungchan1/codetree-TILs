@@ -1,105 +1,71 @@
 def check_range(diff, low, high):
-    return True if (low <= diff and diff <= high) else False
+    return low <= diff <= high
 
-def get_splites(egg_plate: list, low, high):
-    splites = list()
-    line_number = len(egg_plate)
-    
-    for row in range(line_number):
-        if row == line_number-1 :
-            break
-        for col in range(line_number):
-            if col == line_number-1 :
-                break
-            
-            # 오른쪽 확인
-            diff = abs(egg_plate[row][col] - egg_plate[row][col+1])
-            if check_range(diff, low, high):
-                splites.append([(row,col), (row,col+1)])
-            # 아래쪽 확인
-            diff = abs(egg_plate[row][col] - egg_plate[row+1][col])
-            if check_range(diff, low, high):
-                splites.append([(row,col), (row+1,col)])
+def get_splites(egg_plate, low, high):
+    n = len(egg_plate)
+    splites = []
+    for row in range(n):
+        for col in range(n):
+            if col < n - 1:  # Check right
+                diff = abs(egg_plate[row][col] - egg_plate[row][col+1])
+                if check_range(diff, low, high):
+                    splites.append([(row, col), (row, col+1)])
+            if row < n - 1:  # Check down
+                diff = abs(egg_plate[row][col] - egg_plate[row+1][col])
+                if check_range(diff, low, high):
+                    splites.append([(row, col), (row+1, col)])
     return splites            
 
-        
-def merge_splites(splites):
-    merged_splites = {}
-    on_depend = set()
+def merge_splites(splites, n):
+    parent = {}
+    def find(p):
+        if parent[p] != p:
+            parent[p] = find(parent[p])
+        return parent[p]
 
+    def union(p, q):
+        rootP = find(p)
+        rootQ = find(q)
+        if rootP != rootQ:
+            parent[rootQ] = rootP
+
+    # Initialize parent for each cell
+    for row in range(n):
+        for col in range(n):
+            parent[(row, col)] = (row, col)
+
+    # Apply union
     for p1, p2 in splites:
-        # print(f"p1 {p1}, p2 {p2}")
-        keys = merged_splites.keys()
-        if p1 in keys and p2 in keys:
+        union(p1, p2)
 
-            p1_key = merged_splites[p1]
-            p2_key = merged_splites[p2]
+    # Group by parent
+    groups = {}
+    for key in parent:
+        root = find(key)
+        if root not in groups:
+            groups[root] = []
+        groups[root].append(key)
 
-            # 두개 합치기
-            merged_splites[p1_key] += merged_splites[p2_key][:]
+    return list(groups.values())
 
-            # 키 교체
-            on_depend.add(*merged_splites[p2_key])
-            merged_splites[p2_key] = merged_splites[p1_key]
+def simulate(egg_plate, L, R):
+    n = len(egg_plate)
+    count = 0
+    while True:
+        splites = get_splites(egg_plate, L, R)
+        if not splites:
+            break
+        merged_splites = merge_splites(splites, n)
+        for group in merged_splites:
+            egg_sum = sum(egg_plate[r][c] for r, c in group)
+            egg_average = egg_sum // len(group)
+            for r, c in group:
+                egg_plate[r][c] = egg_average
+        count += 1
+    return count
 
-        elif p1 in keys:
-            merged_splites[p2] = merged_splites[p1]
-            merged_splites[p1].append(p2)
-            on_depend.add(p2)
-
-
-        elif p2 in keys:
-            merged_splites[p1] = merged_splites[p2]
-            merged_splites[p2].append(p1)
-            on_depend.add(p1)
-
-
-        else:
-            # 키 생성
-            merged_splites[p1] = [p1, p2]
-            merged_splites[p2] = merged_splites[p1]
-            on_depend.add(p2)
-    
-    result = []
-
-    # print(f"merged splites {merged_splites}")
-    for key, points in merged_splites.items():
-        if not key in on_depend:
-            result.append(points)
-            # print(f" points {points}, result {result}")
-
-    return result
-
-
+# Example Usage
 n, L, R = map(int, input().split())
-
-
-egg_plate = []
-
-for row in range(n):
-    egg_plate.append(list(map(int, input().split())))
-
-count = 0
-while True:
-    # 이동할 게 있는지 확인 
-    splites = get_splites(egg_plate,L,R)
-    if not splites : 
-        break
-
-    # 계란틀의 선을 분리
-    merged_splites = merge_splites(splites)
-    # print(merged_splites)
-    # 계란을 합치고, 다시 분리
-    for splites in merged_splites :
-        egg_sum = 0
-        for row, col in splites :
-            egg_sum += egg_plate[row][col]
-        egg_average = egg_sum // len(splites)
-        for row, col in splites :
-            egg_plate[row][col] = egg_average
-
-
-    count += 1
-
-
-print(count)
+egg_plate = [list(map(int, input().split())) for _ in range(n)]
+result = simulate(egg_plate, L, R)
+print(result)
