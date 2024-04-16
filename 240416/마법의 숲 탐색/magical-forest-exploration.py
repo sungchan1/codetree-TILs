@@ -51,10 +51,10 @@ def move_robot(score:int, row: int, col: int):
 
     visited[row][col] = True
     if row == R+2:
-        dp[(row,col)] = row
+        # dp[(row,col)] = row
         return row
-    elif (row,col) in dp.keys():
-        return dp[(row,col)]
+    # elif (row,col) in dp.keys():
+    #     return dp[(row,col)]
 
     score = max(score, row)
 
@@ -71,16 +71,15 @@ def move_robot(score:int, row: int, col: int):
     if check_movable(row,col, row, col+1):
         score = max(score, move_robot(score, row, col+1))
 
-    if score == R+2:
-        dp[(row,col)] = score
+    # if score == R+2:
+    #     dp[(row,col)] = score
 
     return score
 def reset_planet():
-    global dp, planet
+    global planet
     for i in range(R + 3):
         for j in range(C):
             planet[i][j] = 0
-    dp = {}
 
 def drop_rocket(column, direction) -> int:
     global R,C, planet, dx, dy
@@ -124,13 +123,11 @@ def drop_rocket(column, direction) -> int:
             row = row + 1
             col = col -1
             direction = (direction - 1) % 4
-
             continue
         elif check_right(row,col) and check_down(row,col+1) :
             row = row+1
             col = col + 1
             direction = (direction + 1) % 4
-
             continue
         else:
             break
