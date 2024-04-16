@@ -72,9 +72,6 @@ def move_robot(score:int, row: int, col: int):
     if check_movable(row,col, row, col+1):
         score = max(score, move_robot(score, row, col+1))
 
-    if score == R+2:
-        dp[(row,col)] = score
-
     return score
 def reset_planet():
     global planet, dp
