@@ -11,7 +11,6 @@ visited = []
 dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 dp = {}
-max_dp = {}
 answer = 0 #
 
 
@@ -53,10 +52,10 @@ def move_robot(score:int, row: int, col: int):
 
     visited[row][col] = True
     if row == R+2:
-        # dp[(row,col)] = row
+        dp[(row,col)] = row
         return row
-    # elif (row,col) in dp.keys():
-    #     return dp[(row,col)]
+    elif (row,col) in dp.keys():
+        return dp[(row,col)]
 
     score = max(score, row)
 
@@ -73,12 +72,13 @@ def move_robot(score:int, row: int, col: int):
     if check_movable(row,col, row, col+1):
         score = max(score, move_robot(score, row, col+1))
 
-    # if score == R+2:
-    #     dp[(row,col)] = score
+    if score == R+2:
+        dp[(row,col)] = score
 
     return score
 def reset_planet():
-    global planet
+    global planet, dp
+    dp = {}
     for i in range(R + 3):
         for j in range(C):
             planet[i][j] = 0
@@ -159,7 +159,7 @@ def drop_rocket(column, direction) -> int:
 
 
 def main():
-    global R, C, K, visited
+    global R, C, K, visited, dp
     R, C, K = map(int, input().split())
     answer= 0
     for id in range(1, K + 1): # 골렘 번호 id
