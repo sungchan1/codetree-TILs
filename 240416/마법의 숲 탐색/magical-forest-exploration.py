@@ -19,9 +19,11 @@ FAIL_DROP = 0
 
 def check_movable(r,c, nr,nc):
     global planet, visited, R, C
-    if visited[nr][nc]:
+
+    if nr < 0 or nr > R+2 or nc <0 or nc > C-1:
         return False
-    elif nr < 0 or nr > R+2 or nc <0 or nc > C-1:
+
+    if visited[nr][nc]:
         return False
 
     cell_type= planet[r][c]
