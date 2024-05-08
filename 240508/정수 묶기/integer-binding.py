@@ -10,8 +10,8 @@ def max_grouped_score(n, numbers):
 
     # 음수 처리 - 음수는 작은 것부터 묶어야 큰 양수가 됨
     i = 0
-    while i < n and numbers[i] < 0:
-        if i + 1 < n and numbers[i + 1] < 0:
+    while i < n and numbers[i] <= 0:
+        if i + 1 < n and numbers[i + 1] <= 0:
             # 연속된 음수 두 개를 곱해서 점수 추가
             max_score += numbers[i] * numbers[i + 1]
             i += 2
