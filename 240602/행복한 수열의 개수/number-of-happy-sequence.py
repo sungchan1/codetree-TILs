@@ -15,6 +15,9 @@ for row in range(N):
         if i == 0:
             last = target
             count = 1
+            if count >= M:
+                result += 1
+                break
             continue
         
         if last == target:
@@ -36,6 +39,9 @@ for col in range(N):
         if i == 0:
             last = target
             count = 1
+            if count >= M:
+                result += 1
+                break
             continue
         
         if last == target:
