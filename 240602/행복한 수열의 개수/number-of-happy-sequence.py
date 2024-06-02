@@ -9,7 +9,7 @@ for _ in range(N):
 
 result = 0
 for row in range(N):
-    count = 0 
+    count = 1
     for i in range(N):
         target = numbers[row][i]
         if i == 0:
@@ -30,11 +30,9 @@ for row in range(N):
 
 # 세로
 for col in range(N):
-    count = 0 
+    count = 1
     for i in range(N):
         target = numbers[i][col]
-
-
         if i == 0:
             last = target
             count = 1
