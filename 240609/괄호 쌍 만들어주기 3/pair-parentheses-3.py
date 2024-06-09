@@ -7,6 +7,8 @@ for i in range(length-1):
     if braces[i] == "(":
         for j in range(i+1, length):
             if braces[j] == ")":
-                result +=1 
+                result +=1
+    else:
+        continue
 
 print(result)
