@@ -1,14 +1,8 @@
-braces = input().strip()
+n = input()
 
-length = len(braces)
-
-result = 0
-for i in range(length-1):
-    if braces[i] == "(":
-        for j in range(i+1, length):
-            if braces[j] == ")":
-                result +=1
-    else:
-        continue
-
-print(result)
+cnt = 0
+for i in range(len(n)):
+    for j in range(i+1, len(n)):
+        if n[i] == '(' and n[j] == ')':
+            cnt += 1
+print(cnt)
