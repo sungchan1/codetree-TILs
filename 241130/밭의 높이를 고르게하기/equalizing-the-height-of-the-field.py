@@ -12,7 +12,9 @@ costs = [
 result = float("inf")
 
 
-for i in range(N-T):
+
+
+for i in range(N-T+1):
     target = sum(costs[i:i+T])
     result = min(result, target)
 
