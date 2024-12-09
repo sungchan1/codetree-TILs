@@ -1,27 +1,23 @@
+from collections import deque
+
 n = int(input())
 
+def bfs():
+    queue = deque()
+    queue.append(([], [False] * (n + 1)))  
+    while queue:
+        current_answer, visited = queue.popleft()
 
-answer = []
-visited = [False] * (n+1)
-
-
-
-
-def dfs(count):
-
-    if count == n+1:
-        print(" ".join(map(str, answer)))
-
-
-    for next_index in range(1, n+1):
-        if visited[next_index]:
+  
+        if len(current_answer) == n:
+            print(" ".join(map(str, current_answer)))
             continue
 
-        visited[next_index] = True
-        answer.append(next_index)
-        dfs(count+1)
-        answer.pop()
-        visited[next_index] = False
-    
+        for next_index in range(1, n + 1):
+            if not visited[next_index]:
+                new_answer = current_answer + [next_index]
+                new_visited = visited[:]
+                new_visited[next_index] = True
+                queue.append((new_answer, new_visited))
 
-dfs(1)
+bfs()
